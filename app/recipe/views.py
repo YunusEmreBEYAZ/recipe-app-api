@@ -42,25 +42,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return serializers.RecipeDetailSerializer
 
 
-class PublicRecipeViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    Viewset for listing all recipes without authentication
-    """
-    serializer_class = serializers.RecipeSerializer
-    queryset = Recipe.objects.all()
-    permission_classes = [AllowAny]
-    authentication_classes = []
 
-    def get_queryset(self):
-        """
-        Return all recipes ordered by newest first
-        """
-        print(self.permission_classes)
-        print(self.authentication_classes)
-        return self.queryset.order_by('-id')
-
-
-class TagViewSet(mixins.DestroyModelMixin,
+class TagViewSet(mixins.CreateModelMixin,
+                 mixins.DestroyModelMixin,
                  mixins.UpdateModelMixin,
                  mixins.ListModelMixin,
                  viewsets.GenericViewSet):
@@ -73,3 +57,7 @@ class TagViewSet(mixins.DestroyModelMixin,
     def get_queryset(self):
         """Filter queryset to authenticated user."""
         return self.queryset.filter(user=self.request.user).order_by('-name')
+
+    def perform_create(self, serializer):
+        """ Create a new tag with the authenticated user."""
+        serializer.save(user=self.request.user)
