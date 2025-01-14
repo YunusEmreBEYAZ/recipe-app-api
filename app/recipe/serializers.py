@@ -9,7 +9,7 @@ from core.models import (
 
 
 class TagSerializer(serializers.ModelSerializer):
-    """ Serializer for Tags."""
+    """Serializer for Tags."""
     class Meta:
         model = Tag
         fields = ['id', 'name']
@@ -17,7 +17,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    """ Serializer for recipe object. """
+    """Serializer for recipe object."""
 
     # with this method we can call user.name (user objects have name attribute)
     user = serializers.SerializerMethodField()
@@ -30,7 +30,8 @@ class RecipeSerializer(serializers.ModelSerializer):
                   'time_minutes', 'price', 'link', 'tags']
         read_only_fields = ['id']
 
-    def get_or_create_tag(self, tags, recipe):
+    def _get_or_create_tags(self, tags, recipe):
+        """Helper method to get or create tags."""
         auth_user = self.context['request'].user
         for tag in tags:
             tag_obj, created = Tag.objects.get_or_create(
@@ -63,6 +64,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeDetailSerializer(RecipeSerializer):
-    """ Serializer for recipe detail. """
+    """Serializer for recipe detail."""
+
+    tags = TagSerializer(many=True, required=False)
+
     class Meta(RecipeSerializer.Meta):
         fields = RecipeSerializer.Meta.fields + ['description']

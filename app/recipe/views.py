@@ -7,7 +7,7 @@ from rest_framework import (
     mixins,
 )
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from core.models import (
     Recipe,
@@ -40,7 +40,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return serializers.RecipeSerializer
 
         return serializers.RecipeDetailSerializer
-
 
 
 class TagViewSet(mixins.CreateModelMixin,
