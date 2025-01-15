@@ -38,7 +38,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ['id', 'user', 'title', 'description',
                   'time_minutes', 'price', 'link', 'tags',
-                  'ingredients']
+                  'ingredients', 'image']
         read_only_fields = ['id']
 
     def _get_or_create_tags(self, tags, recipe):
@@ -99,3 +99,13 @@ class RecipeDetailSerializer(RecipeSerializer):
 
     class Meta(RecipeSerializer.Meta):
         fields = RecipeSerializer.Meta.fields + ['description']
+
+
+class RecipeImageSerializer(serializers.ModelSerializer):
+    """ Serializer for uploading images to recipes. """
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': 'True'}}
