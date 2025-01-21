@@ -114,12 +114,13 @@ class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,
         """Filter queryset to authenticated user."""
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
+
 @extend_schema_view(
     list=extend_schema(
         parameters=[
             OpenApiParameter(
                 'assigned_only',
-                OpenApiTypes.INT, enum=[0,1],
+                OpenApiTypes.INT, enum=[0, 1],
                 description='Filter tags by assigned recipes only',
             ),
         ]
@@ -147,12 +148,13 @@ class TagViewSet(mixins.DestroyModelMixin,
 
         return queryset.filter(user=self.request.user).order_by('-name').distinct()
 
+
 @extend_schema_view(
     list=extend_schema(
         parameters=[
             OpenApiParameter(
                 name='assigned_only',
-                type=OpenApiTypes.INT, enum=[0,1],
+                type=OpenApiTypes.INT, enum=[0, 1],
                 description='Filter ingredients by assigned recipes only',
             ),
         ]
